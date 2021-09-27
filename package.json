@@ -10,16 +10,44 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:regex-replacer.helloWorld"
+		"onCommand:regex-replacer.helloWorld",
+		"onView:regexList"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
 		"commands": [
 			{
-				"command": "regex-replacer.helloWorld",
-				"title": "Hello World"
+				"command": "regex-replacer.applyRegex",
+				"title": "Apply",
+				"icon": "$(play)"
 			}
-		]
+		],
+		"viewsContainers": {
+			"activitybar": [
+				{
+					"id": "regex-replacer",
+					"title": "Regex Replacer",
+					"icon": "media/3669135_find_replace_ic_icon.svg"
+				}
+			]
+		},
+		"views": {
+			"regex-replacer": [
+				{
+					"id": "regexList",
+					"name": "Regex list",
+					"contextualTitle": "Package Explorer"
+				}
+			]
+		},
+		"menus": {
+			"view/item/context": [
+				{
+					"command": "regex-replacer.applyRegex",
+					"group": "inline"
+				}
+			]
+		}
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
