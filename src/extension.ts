@@ -1,6 +1,7 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
+import patterns from './patterns.json';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -39,8 +40,10 @@ export class RegexProvider implements vscode.TreeDataProvider<Regex> {
     if (element) {
       return Promise.resolve([]);
     } else {
-      const ret = new Regex("Replace String", "string", "str", vscode.TreeItemCollapsibleState.None);
-      return Promise.resolve([ret]);
+      const regexes = patterns.map(pattern => {
+        return new Regex(pattern[0], pattern[1], pattern[2], vscode.TreeItemCollapsibleState.None);
+      });
+      return Promise.resolve(regexes);
     }
   }
 }
