@@ -1,8 +1,9 @@
 {
 	"name": "regex-replacer",
 	"displayName": "Regex Replacer",
+	"publisher": "jgkong",
 	"description": "",
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"engines": {
 		"vscode": "^1.60.0"
 	},
@@ -10,7 +11,8 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:regex-replacer.helloWorld",
+		"onCommand:regex-replacer.applyRegex",
+		"onCommand:regex-replacer.reloadRegex",
 		"onView:regexList"
 	],
 	"main": "./out/extension.js",
@@ -18,8 +20,25 @@
 		"commands": [
 			{
 				"command": "regex-replacer.applyRegex",
-				"title": "Apply",
+				"title": "Regex Replacer: Apply",
 				"icon": "$(play)"
+			},
+			{
+				"command": "regex-replacer.reloadRegex",
+				"title": "Regex Replacer: Reload Patterns"
+			}
+		],
+		"configuration": [
+			{
+				"title": "Regex Replacer",
+				"properties": {
+					"regex-replacer.patterns": {
+						"type": "string",
+						"description": "Regex Replacer Patterns",
+						"editPresentation": "multilineText",
+						"default": "[]"
+					}
+				}
 			}
 		],
 		"viewsContainers": {

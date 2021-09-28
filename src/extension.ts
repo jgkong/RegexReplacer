@@ -1,7 +1,6 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
-import patterns from './patterns.json';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -25,6 +24,10 @@ export function activate(context: vscode.ExtensionContext) {
     });
   }));
 
+  context.subscriptions.push(vscode.commands.registerCommand('regex-replacer.reloadRegex', () => {
+    regexTreeProvider.refresh();
+  }));
+
 }
 
 // this method is called when your extension is deactivated
@@ -32,6 +35,14 @@ export function deactivate() {}
 
 
 export class RegexProvider implements vscode.TreeDataProvider<Regex> {
+  private _onDidChangeTreeData: vscode.EventEmitter<Regex | undefined | void> = new vscode.EventEmitter<Regex | undefined | void>();
+  readonly onDidChangeTreeData: vscode.Event<Regex | undefined |void> = this._onDidChangeTreeData.event;
+
+  constructor(
+    private patterns: [] = []
+  ) {
+    this.loadPatterns();
+  }
   getTreeItem(element: Regex): vscode.TreeItem {
     return element;
   }
@@ -40,11 +51,22 @@ export class RegexProvider implements vscode.TreeDataProvider<Regex> {
     if (element) {
       return Promise.resolve([]);
     } else {
-      const regexes = patterns.map(pattern => {
+      const regexes = this.patterns.map(pattern => {
         return new Regex(pattern[0], pattern[1], pattern[2], vscode.TreeItemCollapsibleState.None);
       });
       return Promise.resolve(regexes);
     }
+  }
+
+  loadPatterns() {
+    const patternsStr = String(vscode.workspace.getConfiguration().get<string>("regex-replacer.patterns"));
+    this.patterns = JSON.parse(patternsStr);
+  }
+
+
+  refresh() {
+    this.loadPatterns();
+    this._onDidChangeTreeData.fire();
   }
 }
 
